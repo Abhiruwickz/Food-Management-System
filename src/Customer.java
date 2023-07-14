@@ -48,13 +48,13 @@ public class Customer {
     public static void cashierStatusUpdate(int queueNumber) {
         switch (queueNumber) {
             case 1:
-                cashier1[work.line_1.size() - 1] = "X";
+                cashier1[Main.line_1.size() - 1] = "X";
                 break;
             case 2:
-                cashier2[work.line_2.size() - 1] = "X";
+                cashier2[Main.line_2.size() - 1] = "X";
                 break;
             case 3:
-                cashier3[work.line_3.size() - 1] = "X";
+                cashier3[Main.line_3.size() - 1] = "X";
                 break;
 
             default:

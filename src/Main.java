@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class work {
+public class Main {
     private static final int Queue1_max_size = 2;
     private static final int Queue2_max_size = 3;
     private static final int Queue3_max_size = 5;
@@ -17,8 +17,6 @@ public class work {
 
     private static int BurgerStock = 50;
     static int burgerPrice = 650;
-    private static int burgersCount = 0;
-
 
     public static void main(String[] args) {
 
