@@ -233,6 +233,10 @@ public class work {
                     }
 
                 }
+                //demo project testing
+
+
+
                 case "108", "STK" -> {
                     System.out.println("Remaining burgers in stock: " + BurgerStock);
                 }
