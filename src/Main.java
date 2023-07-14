@@ -14,6 +14,7 @@ public class Main {
     static ArrayList<Customer> line_1 = new ArrayList<>();
     static ArrayList<Customer> line_2 = new ArrayList<>();
     static ArrayList<Customer> line_3 = new ArrayList<>();
+    static Queue<Customer> waitingListQueue = new LinkedList<>();
 
     private static int BurgerStock = 50;
     static int burgerPrice = 650;
@@ -40,6 +41,8 @@ public class Main {
         System.out.println("107 or LPD: Load Program Data from file");
         System.out.println("108 or STK: View Remaining burgers Stock");
         System.out.println("109 or AFS: Add burgers to Stock");
+        System.out.println("110 or IFQ: Income of each queue");
+        System.out.println("112 or GUI: Graphical user interface");
         System.out.println("999 or EXT: Exit the Program");
 
         while (true) {
@@ -89,7 +92,7 @@ public class Main {
                     BurgerStock -= burgersCount;
                     customerNameList.add(customer);
 
-                    if (BurgerStock >= burgersCount) {
+                    if (burgersCount <= BurgerStock ) {
                         System.out.println("Customer added successfully.");
                         if (FoodQueue1.size() < Queue1_max_size) {
                             FoodQueue1.add(customer);
@@ -113,8 +116,13 @@ public class Main {
                             System.out.println("All queues are full. Customer cannot be added.");
                         }
                     } else  {
-                        System.out.println("Burger stock is insufficient. Customer cannot be added.");
-                    }
+                        if (BurgerStock - burgersCount > 50){
+                            System.out.println("Warning burger count is more than 50 Please add additional burgers");
+
+                    }else {
+                            System.out.println("Burger stock is insufficient. Customer cannot be added.");
+                        }
+                }
                 }
                 case "103", "RCQ" -> {
                     System.out.print("Enter Queue number to remove customer from (1-3): ");
@@ -174,7 +182,10 @@ public class Main {
                                 targetQueue.set(i, nextCustomer);
                                 System.out.println("Next customer in line added to Queue 3.");
                             } else {
-                                System.out.println("No customers in line to add to the queue.");
+                                // All Food queues are full, add customer to Waiting List queue
+                                waitingListQueue.add(customer);
+                                System.out.println("Customer added to Waiting List queue.");
+
                             }
                             break;
                         }
@@ -194,46 +205,56 @@ public class Main {
                     for (Customer customer : uniqueCustomers) {
                         System.out.println("* Name: " + customer.getFirstName().toUpperCase() + " * No. of Burgers: " + customer.getBurgersCount());
                     }
-
-
                 }
                 case "106", "SPD" -> {
+                    customerNameList.sort(Comparator.comparing(Customer::getFirstName));
                     try (BufferedWriter writer = new BufferedWriter(new FileWriter("programData.txt"))) {
-                        for (Customer customer : customerNameList) {
-                            writer.write(customer.getFirstName());
-                            writer.write(customer.burgersCount);
-                            writer.newLine();
-                        }
-                        System.out.println("Customer names saved to file successfully.");
-                    } catch (IOException e) {
-                        System.out.println("Error occurred while saving customer names: " + e.getMessage());
+                            ArrayList<String> uniqueFirstNames = new ArrayList<>();
+
+                            for (Customer customer : customerNameList) {
+                                String firstName = customer.getFirstName();
+
+                                // Check if the first name is already present in the list
+
+                                if (!uniqueFirstNames.contains(firstName)) {
+                                    uniqueFirstNames.add(firstName);
+                                    writer.write(firstName);
+                                    writer.newLine();
+                                }
+                            }
+
+                            System.out.println("Customer names saved to file successfully.");
+                        } catch (IOException e) {
+                            System.out.println("Error occurred while saving customer names: " + e.getMessage());
+
                     }
 
 
                 }
                 case "107", "LPD" -> {
+                    // Clear the existing customer names in the list
+                    customerNameList.clear();
+
                     try (BufferedReader br = new BufferedReader(new FileReader("programData.txt"))) {
                         String line;
                         while ((line = br.readLine()) != null) {
+                            // Create a new Customer object for each line in the file
                             Customer customer = new Customer();
-                            customer.firstName = line;// Assuming the 'firstName' variable is accessible
-                            customer.lastName = line;
+                            customer.setFirstName(line); // Assuming the 'setFirstName' method is available in the Customer class
+
                             customerNameList.add(customer);
                         }
 
                         // Print the loaded customer names
                         for (Customer customer : customerNameList) {
-                            System.out.println(customer.firstName + customer.lastName);
+                            System.out.println(customer.getFirstName());
                         }
                         System.out.println("Customer names loaded from file successfully.");
                     } catch (IOException e) {
                         System.out.println("Error occurred while loading customer names: " + e.getMessage());
+
                     }
-
                 }
-                //demo project testing
-
-
 
                 case "108", "STK" -> {
                     System.out.println("Remaining burgers in stock: " + BurgerStock);
