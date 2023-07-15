@@ -1,27 +1,19 @@
-import java.util.Comparator;
-import java.util.Scanner;
-import java.util.ArrayList;
 public class Customer {
     String firstName;
     String lastName;
     int burgersCount;
     public static int burgerPrice = 650;
-    static String [] cashier1;
-    static String [] cashier2;
-    static String [] cashier3;
-    Scanner input = new Scanner(System.in);
 
     public Customer() {
         this.firstName = "";
         this.lastName = "";
     }
+
     public String getFirstName() {
-       // System.out.print("Enter the first name of the customer: ");return input.next();
        return firstName;
     }
 
     public String getLastName() {
-       // System.out.print("Enter the last name of the customer: ");return input.next();
         return lastName;
     }
 
@@ -45,23 +37,9 @@ public class Customer {
         return firstName + " " + lastName;
     }
 
-    public static void cashierStatusUpdate(int queueNumber) {
-        switch (queueNumber) {
-            case 1:
-                cashier1[Main.line_1.size() - 1] = "X";
-                break;
-            case 2:
-                cashier2[Main.line_2.size() - 1] = "X";
-                break;
-            case 3:
-                cashier3[Main.line_3.size() - 1] = "X";
-                break;
 
-            default:
-                System.out.print("Invalid queue number.");
-        }
-    }
 }
+
 
 
 
