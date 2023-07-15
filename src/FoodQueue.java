@@ -1,5 +1,6 @@
 public class FoodQueue {
-    private Customer[] queue;
+
+    private final Customer[] queue;
 
     public FoodQueue(int queueLength) {
         queue = new Customer[queueLength];
@@ -23,4 +24,11 @@ public class FoodQueue {
 
     public void setFoodQueueCustomer(int queueNumber, String firstName, String lastName, int burgersCount) {
     }
+    public static boolean isWaitingListEmpty() {
+        return Main.waitingListQueue.isEmpty();
+    }
+    public static boolean isWaitingListFull(int maxCapacity) {
+        return Main.waitingListQueue.size() == maxCapacity;
+    }
+
 }

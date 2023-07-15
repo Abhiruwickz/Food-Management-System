@@ -2,7 +2,6 @@ public class Customer {
     String firstName;
     String lastName;
     int burgersCount;
-    public static int burgerPrice = 650;
 
     public Customer() {
         this.firstName = "";
@@ -23,7 +22,6 @@ public class Customer {
     }
     public void setFirstName(String firstName){
         this.firstName = firstName;
-
     }
     public void setLastName(String lastName){
         this.lastName = lastName;

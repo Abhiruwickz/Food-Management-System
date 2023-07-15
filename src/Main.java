@@ -87,39 +87,62 @@ public class Main {
                     System.out.print("How many burgers does the customer want?: ");
                     int burgersCount = Input.nextInt();
                     customer.setBurgersCount(burgersCount);
-
-                    BurgerStock -= burgersCount;
                     customerNameList.add(customer);
 
-                    if (burgersCount < BurgerStock && burgersCount <= 40) {
-                        System.out.println("Customer added successfully.");
+                    if (burgersCount <= BurgerStock) {
                         if (FoodQueue1.size() < Queue1_max_size) {
                             FoodQueue1.add(customer);
                             customerNameList.add(customer);
                             line_1.add(customer);
+                            System.out.println("Customer added successfully.");
                             System.out.println("Customer added to Queue 1.");
+                            BurgerStock -= burgersCount;
                             cashier1[line_1.size() - 1] = "O";
                         } else if (FoodQueue2.size() < Queue2_max_size) {
                             FoodQueue2.add(customer);
                             customerNameList.add(customer);
                             line_2.add(customer);
+                            System.out.println("Customer added successfully.");
                             System.out.println("Customer added to Queue 2.");
+                            BurgerStock -= burgersCount;
                             cashier2[line_2.size() - 1] = "O";
                         } else if (FoodQueue3.size() < Queue3_max_size) {
                             FoodQueue3.add(customer);
                             customerNameList.add(customer);
                             line_3.add(customer);
+                            System.out.println("Customer added successfully.");
                             System.out.println("Customer added to Queue 3.");
+                            BurgerStock -= burgersCount;
                             cashier3[line_3.size() - 1] = "O";
                         } else {
-                            System.out.println("All queues are full. Customer cannot be added.");
+                            System.out.println("All queues are full. Customer added to the Waiting List");
+                            System.out.print("Enter the first name of the customer: ");
+                            firstName = Input.next();
+                            System.out.print("Enter the last name of the customer: ");
+                            lastName = Input.next();
+                            System.out.print("How many burgers does the customer want? ");
+                            burgersCount = Input.nextInt();
+
+                            int maxCapacity = 10; // Replace with the actual maximum capacity
+                            if (FoodQueue.isWaitingListFull(maxCapacity)) {
+                                System.out.println("Waiting List is Full");
+                            }
+
+                            // Create a new customer with the provided details
+                            Customer newCustomer = new Customer();
+                            newCustomer.setFirstName(firstName);
+                            newCustomer.setLastName(lastName);
+                            newCustomer.setBurgersCount(burgersCount);
+                            waitingListQueue.add(newCustomer);
+                            customerNameList.add(newCustomer);
+                            System.out.println("Customer added to Waiting List queue.");
+                            BurgerStock -= burgersCount;
                         }
                     } else {
+                        System.out.println("Burger stock is insufficient. Customer cannot be added.");
+                        customerNameList.remove(customer); // Remove the customer from the customerNameList
                         if (BurgerStock == 10) {
-                            System.out.println("Please add burgers to the stock is low (select option 109 to add).");
-                        } else {
-                            System.out.println("Burger stock is insufficient. Customer cannot be added.");
-
+                            System.out.println("Burger Stock is low please add burgers to the stock (select option 109 to add).");
                         }
                     }
                 }
@@ -165,95 +188,72 @@ public class Main {
                                 break;
                         }
                         System.out.println("Customer removed from Queue " + queueNumber + ".");
+                        customerNameList.remove(removedCustomer);
 
                     } else {
                         System.out.println("No customer found at the specified position.");
                     }
                 }
                 case "104", "PCQ" -> {
-                        System.out.print("Enter Queue number to remove served customer from (1-3): ");
-                        int queueNumber = Input.nextInt();
-                        if (queueNumber < 1 || queueNumber > 3) {
-                            System.out.println("Invalid queue number. Please try again.");
-                            break;
-                        }
-
-                        List<Customer> targetQueue = getQueue(queueNumber);
-                        boolean removed = false;
-
-                        for (int i = 0; i < targetQueue.size(); i++) {
-                            Customer customer = targetQueue.get(i);
-                            if (customer != null) {
-                                targetQueue.set(i, null);
-                                removeCustomerFromLine(customer);
-                                switch (queueNumber) {
-                                    case 1:
-                                        if (line_1.size() > 0) {
-                                            cashier1[line_1.size() - 1] = "X";
-                                        }
-                                        break;
-                                    case 2:
-                                        if (line_2.size() > 0) {
-                                            cashier2[line_2.size() - 1] = "X";
-                                        }
-                                        break;
-                                    case 3:
-                                        if (line_3.size() > 0) {
-                                            cashier3[line_3.size() - 1] = "X";
-                                        }
-                                        break;
-                                    default:
-                                        System.out.print("Invalid queue number.");
-                                        break;
-                                }
-                                System.out.println("Served customer removed from Queue " + queueNumber + ".");
-                                removed = true;
-
-                                // Add customer from the waiting list to the queue if available
-                                if (waitingListQueue.size() > 0) {
-                                    Customer nextCustomer = waitingListQueue.remove();
-                                    targetQueue.set(i, nextCustomer);
-                                    switch (queueNumber) {
-                                        case 1:
-                                            cashier1[line_1.size() - 1] = "O";
-                                            break;
-                                        case 2:
-                                            cashier2[line_2.size() - 1] = "O";
-                                            break;
-                                        case 3:
-                                            cashier3[line_3.size() - 1] = "O";
-                                            break;
-                                    }
-                                    System.out.println("Next customer from Waiting List added to Queue " + queueNumber + ".");
-                                }
-                                break;
-                            }
-                        }
-
-                        if (!removed) {
-                            System.out.println("No served customer found in the queue.");
-                        }
-
-                        // Prompt for customer details (name and burger counts)
-                        System.out.print("Enter the first name of the customer: ");
-                        String firstName = Input.next();
-                        System.out.print("Enter the last name of the customer: ");
-                        String lastName = Input.next();
-                        System.out.print("How many burgers does the customer want? ");
-                        int burgersCount = Input.nextInt();
-
-                        // Create a new customer with the provided details
-                        Customer newCustomer = new Customer();
-                        newCustomer.setFirstName(firstName);
-                        newCustomer.setLastName(lastName);
-                        newCustomer.setBurgersCount(burgersCount);
-
-                        // Add the new customer to the waiting list queue
-                        waitingListQueue.add(newCustomer);
-                        customerNameList.add(newCustomer);
-                        System.out.println("Customer added to Waiting List queue.");
+                    System.out.print("Enter Queue number to remove served customer from (1-3): ");
+                    int queueNumber = Input.nextInt();
+                    if (queueNumber < 1 || queueNumber > 3) {
+                        System.out.println("Invalid queue number. Please try again.");
+                        break;
                     }
 
+                    List<Customer> targetQueue = getQueue(queueNumber);
+                    boolean removed = false;
+
+                    for (int i = 0; i < targetQueue.size(); i++) {
+                        Customer customer = targetQueue.get(i);
+                        if (customer != null) {
+                            targetQueue.set(i, null);
+                            removeCustomerFromLine(customer);
+                            switch (queueNumber) {
+                                case 1:
+                                    if (!line_1.isEmpty()) {
+                                        cashier1[line_1.size() - 1] = "X";
+                                    }
+                                    break;
+                                case 2:
+                                    if (!line_2.isEmpty()) {
+                                        cashier2[line_2.size() - 1] = "X";
+                                    }
+                                    break;
+                                case 3:
+                                    if (!line_3.isEmpty()) {
+                                        cashier3[line_3.size() - 1] = "X";
+                                    }
+                                    break;
+                                default:
+                                    System.out.println("Invalid queue number.");
+                                    break;
+                            }
+                            System.out.println("Served customer removed from Queue " + queueNumber + ".");
+                            customerNameList.remove(customer);
+                            removed = true;
+
+                            // Add customer from the waiting list to the queue if available
+                            if (!waitingListQueue.isEmpty()) {
+                                Customer nextCustomer = waitingListQueue.remove();
+                                targetQueue.set(i, nextCustomer);
+                                switch (queueNumber) {
+                                    case 1 -> cashier1[line_1.size() - 1] = "O";
+                                    case 2 -> cashier2[line_2.size() - 1] = "O";
+                                    case 3 -> cashier3[line_3.size() - 1] = "O";
+                                    default -> System.out.println("Invalid queue number.");
+                                }
+                                System.out.println("Next customer from Waiting List added to Queue " + queueNumber + ".");
+                            }
+                            break;
+                        }
+                    }
+                    if (!removed) {
+                        System.out.println("No served customer found in the queue.");
+
+                    }
+                }
                 case "105", "VCS" -> {
                     System.out.println("Customer List:");
 
@@ -295,9 +295,7 @@ public class Main {
                             System.out.println("Customer names saved to file successfully.");
                         } catch (IOException e) {
                             System.out.println("Error occurred while saving customer names: " + e.getMessage());
-
                     }
-
                 }
                 case "107", "LPD" -> {
                     // Clear the existing customer names in the list
@@ -334,29 +332,9 @@ public class Main {
                     System.out.println(additional_burgers + " burgers added to stock. Current stock: " + BurgerStock);
                 }
                 case "110", "IFQ" -> {
-
-                    int income1 = 0;
-                    int income2 = 0;
-                    int income3 = 0;
-
-                    for (Customer customer : FoodQueue1) {
-                        if (customer != null) {
-
-                            income1 += customer.burgersCount * burgerPrice;
-                        }
-                    }
-
-                    for (Customer customer : FoodQueue2) {
-                        if (customer != null) {
-                            income2 += customer.burgersCount * burgerPrice;
-                        }
-                    }
-
-                    for (Customer customer : FoodQueue3) {
-                        if (customer != null) {
-                            income3 +=customer.burgersCount * burgerPrice;
-                        }
-                    }
+                    int income1 = calculateIncome(FoodQueue1);
+                    int income2 = calculateIncome(FoodQueue2);
+                    int income3 = calculateIncome(FoodQueue3);
 
                     int totalIncome = income1 + income2 + income3;
 
@@ -365,7 +343,6 @@ public class Main {
                     System.out.println("The Income of Queue 3 is: " + income3);
                     System.out.println("Total income is: " + totalIncome);
                     System.out.println();
-                    break;
 
                 }
                 case "999", "EXT" -> {
@@ -376,25 +353,36 @@ public class Main {
             }
         }
     }
-
-
     private static List<Customer> getQueue(int queueNumber) {
         switch (queueNumber) {
-            case 1:
+            case 1-> {
                 return FoodQueue1;
-            case 2:
+            }
+            case 2 -> {
                 return FoodQueue2;
-            case 3:
+            }
+            case 3 -> {
                 return FoodQueue3;
-            default:
+            }
+            default -> {
                 return null;
+            }
         }
-    }
 
+    }
     private static void removeCustomerFromLine(Customer customer) {
         line_1.remove(customer);
         line_2.remove(customer);
         line_3.remove(customer);
+    }
+    private static int calculateIncome(List<Customer> queue) {
+        int income = 0;
+        for (Customer customer : queue) {
+            if (customer != null) {
+                income += customer.getBurgersCount() * burgerPrice;
+            }
+        }
+        return income;
     }
  }
 

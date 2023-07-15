@@ -359,7 +359,43 @@ public class Course_work {
 
     }
 }
+/*Prompt for customer details (name and burger counts)
+                        System.out.print("Enter the first name of the customer: ");
+                                String firstName = Input.next();
+                                System.out.print("Enter the last name of the customer: ");
+                                String lastName = Input.next();
+                                System.out.print("How many burgers does the customer want? ");
+                                int burgersCount = Input.nextInt();
 
+                                // Create a new customer with the provided details
+                                Customer newCustomer = new Customer();
+                                newCustomer.setFirstName(firstName);
+                                newCustomer.setLastName(lastName);
+                                newCustomer.setBurgersCount(burgersCount);
+
+                                // Add the new customer to the waiting list queue
+                                waitingListQueue.add(newCustomer);
+                                customerNameList.add(newCustomer);
+                                System.out.println("Customer added to Waiting List queue.");
+
+    // Add customer from the waiting list to the queue if available
+                                /*if (waitingListQueue.size() > 0) {
+                                    Customer nextCustomer = waitingListQueue.remove();
+                                    targetQueue.set(i, nextCustomer);
+                                    switch (queueNumber) {
+                                        case 1:
+                                            cashier1[line_1.size() - 1] = "O";
+                                            break;
+                                        case 2:
+                                            cashier2[line_2.size() - 1] = "O";
+                                            break;
+                                        case 3:
+                                            cashier3[line_3.size() - 1] = "O";
+                                            break;
+                                    }
+                                    System.out.println("Next customer from Waiting List added to Queue " + queueNumber + ".");
+                                }
+ */
 
 
 
