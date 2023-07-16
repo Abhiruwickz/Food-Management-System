@@ -10,19 +10,16 @@ public class Main {
     private static final List<Customer> FoodQueue3 = new ArrayList<>(Queue3_max_size);
 
     static ArrayList<Customer> customerNameList = new ArrayList<>();
-    static ArrayList<Customer> line_1 = new ArrayList<>();
-    static ArrayList<Customer> line_2 = new ArrayList<>();
-    static ArrayList<Customer> line_3 = new ArrayList<>();
-    static Queue<Customer> waitingListQueue = new LinkedList<>();
 
     private static int BurgerStock = 50;
     static int burgerPrice = 650;
+    static int maxCapacity;
 
     public static void main(String[] args) {
 
-       String[] cashier1 = {"X", "X"};
-       String[] cashier2 = {"X", "X", "X"};
-       String[] cashier3 = {"X", "X", "X", "X", "X"};
+        String[] cashier1 = {"X", "X"};
+        String[] cashier2 = {"X", "X", "X"};
+        String[] cashier3 = {"X", "X", "X", "X", "X"};
 
         Scanner Input = new Scanner(System.in);
 
@@ -81,11 +78,14 @@ public class Main {
                     System.out.print("Enter the first name of the customer: ");
                     String firstName = Input.next();
                     customer.setFirstName(firstName);
+
                     System.out.print("Enter the last name of the customer: ");
                     String lastName = Input.next();
                     customer.setLastName(lastName);
+
                     System.out.print("How many burgers does the customer want?: ");
                     int burgersCount = Input.nextInt();
+
                     customer.setBurgersCount(burgersCount);
                     customerNameList.add(customer);
 
@@ -93,60 +93,47 @@ public class Main {
                         if (FoodQueue1.size() < Queue1_max_size) {
                             FoodQueue1.add(customer);
                             customerNameList.add(customer);
-                            line_1.add(customer);
+                            FoodQueue.line_1.add(customer);
                             System.out.println("Customer added successfully.");
                             System.out.println("Customer added to Queue 1.");
                             BurgerStock -= burgersCount;
-                            cashier1[line_1.size() - 1] = "O";
+                            cashier1[FoodQueue.line_1.size() - 1] = "O";
+                            break;
                         } else if (FoodQueue2.size() < Queue2_max_size) {
                             FoodQueue2.add(customer);
                             customerNameList.add(customer);
-                            line_2.add(customer);
+                            FoodQueue.line_2.add(customer);
                             System.out.println("Customer added successfully.");
                             System.out.println("Customer added to Queue 2.");
                             BurgerStock -= burgersCount;
-                            cashier2[line_2.size() - 1] = "O";
+                            cashier2[FoodQueue.line_2.size() - 1] = "O";
+                            break;
                         } else if (FoodQueue3.size() < Queue3_max_size) {
                             FoodQueue3.add(customer);
                             customerNameList.add(customer);
-                            line_3.add(customer);
+                            FoodQueue.line_3.add(customer);
                             System.out.println("Customer added successfully.");
                             System.out.println("Customer added to Queue 3.");
                             BurgerStock -= burgersCount;
-                            cashier3[line_3.size() - 1] = "O";
+                            cashier3[FoodQueue.line_3.size() - 1] = "O";
+                            break;
                         } else {
-                            System.out.println("All queues are full. Customer added to the Waiting List");
-                            System.out.print("Enter the first name of the customer: ");
-                            firstName = Input.next();
-                            System.out.print("Enter the last name of the customer: ");
-                            lastName = Input.next();
-                            System.out.print("How many burgers does the customer want? ");
-                            burgersCount = Input.nextInt();
-
-                            int maxCapacity = 10; // Replace with the actual maximum capacity
                             if (FoodQueue.isWaitingListFull(maxCapacity)) {
-                                System.out.println("Waiting List is Full");
+                                System.out.println("All queues are full. Customer added to the Waiting List");
+                                Customer.addCustomerToWaitingList();
+                                BurgerStock -= burgersCount;
+                                break;
                             }
-
-                            // Create a new customer with the provided details
-                            Customer newCustomer = new Customer();
-                            newCustomer.setFirstName(firstName);
-                            newCustomer.setLastName(lastName);
-                            newCustomer.setBurgersCount(burgersCount);
-                            waitingListQueue.add(newCustomer);
-                            customerNameList.add(newCustomer);
-                            System.out.println("Customer added to Waiting List queue.");
-                            BurgerStock -= burgersCount;
-                        }
-                    } else {
-                        System.out.println("Burger stock is insufficient. Customer cannot be added.");
-                        customerNameList.remove(customer); // Remove the customer from the customerNameList
-                        if (BurgerStock == 10) {
-                            System.out.println("Burger Stock is low please add burgers to the stock (select option 109 to add).");
+                        else {
+                                System.out.println("Burger stock is insufficient. Customer cannot be added.");
+                                customerNameList.remove(customer); // Remove the customer from the customerNameList
+                                if (BurgerStock <= 10) {
+                                    System.out.println("Burger Stock is low please add burgers to the stock (select option 109 to add).");
+                                }
+                            }
                         }
                     }
                 }
-
                 case "103", "RCQ" -> {
                     System.out.print("Enter Queue number to remove customer from (1-3): ");
                     int queueNumber = Input.nextInt();
@@ -155,7 +142,7 @@ public class Main {
                         break;
                     }
 
-                    List<Customer> targetQueue = getQueue(queueNumber);
+                    List<Customer> targetQueue = FoodQueue.getQueue(queueNumber);
 
                     System.out.print("Enter position to remove customer from (1-5): ");
                     int position = Input.nextInt();
@@ -166,21 +153,21 @@ public class Main {
 
                     Customer removedCustomer = targetQueue.remove(position - 1);
                     if (removedCustomer != null) {
-                        removeCustomerFromLine(removedCustomer);
+                        FoodQueue.removeCustomerFromLine(removedCustomer);
                         switch (queueNumber) {
                             case 1:
-                                if (line_1.size() > 0) {
-                                    cashier1[line_1.size() - 1] = "X";
+                                if (FoodQueue.line_1.size() > 0) {
+                                    cashier1[FoodQueue.line_1.size() ] = "X";
                                 }
                                 break;
                             case 2:
-                                if (line_2.size() > 0) {
-                                    cashier2[line_2.size() - 1] = "X";
+                                if (FoodQueue.line_2.size() > 0) {
+                                    cashier2[FoodQueue.line_2.size()] = "X";
                                 }
                                 break;
                             case 3:
-                                if (line_3.size() > 0) {
-                                    cashier3[line_3.size() - 1] = "X";
+                                if (FoodQueue.line_3.size() > 0) {
+                                    cashier3[FoodQueue.line_3.size() ] = "X";
                                 }
                                 break;
                             default:
@@ -202,28 +189,28 @@ public class Main {
                         break;
                     }
 
-                    List<Customer> targetQueue = getQueue(queueNumber);
+                    List<Customer> targetQueue = FoodQueue.getQueue(queueNumber);
                     boolean removed = false;
 
                     for (int i = 0; i < targetQueue.size(); i++) {
                         Customer customer = targetQueue.get(i);
                         if (customer != null) {
                             targetQueue.set(i, null);
-                            removeCustomerFromLine(customer);
+                            FoodQueue.removeCustomerFromLine(customer);
                             switch (queueNumber) {
                                 case 1:
-                                    if (!line_1.isEmpty()) {
-                                        cashier1[line_1.size() - 1] = "X";
+                                    if (!FoodQueue.line_1.isEmpty()) {
+                                        cashier1[FoodQueue.line_1.size() - 1] = "X";
                                     }
                                     break;
                                 case 2:
-                                    if (!line_2.isEmpty()) {
-                                        cashier2[line_2.size() - 1] = "X";
+                                    if (!FoodQueue.line_2.isEmpty()) {
+                                        cashier2[FoodQueue.line_2.size() - 1] = "X";
                                     }
                                     break;
                                 case 3:
-                                    if (!line_3.isEmpty()) {
-                                        cashier3[line_3.size() - 1] = "X";
+                                    if (!FoodQueue.line_3.isEmpty()) {
+                                        cashier3[FoodQueue.line_3.size() - 1 ] = "X";
                                     }
                                     break;
                                 default:
@@ -235,13 +222,13 @@ public class Main {
                             removed = true;
 
                             // Add customer from the waiting list to the queue if available
-                            if (!waitingListQueue.isEmpty()) {
-                                Customer nextCustomer = waitingListQueue.remove();
+                            if (!Customer.waitingListQueue.isEmpty()) {
+                                Customer nextCustomer = Customer.waitingListQueue.remove();
                                 targetQueue.set(i, nextCustomer);
                                 switch (queueNumber) {
-                                    case 1 -> cashier1[line_1.size() - 1] = "O";
-                                    case 2 -> cashier2[line_2.size() - 1] = "O";
-                                    case 3 -> cashier3[line_3.size() - 1] = "O";
+                                    case 1 -> cashier1[FoodQueue.line_1.size() - 1] = "O";
+                                    case 2 -> cashier2[FoodQueue.line_2.size() - 1] = "O";
+                                    case 3 -> cashier3[FoodQueue.line_3.size() - 1] = "O";
                                     default -> System.out.println("Invalid queue number.");
                                 }
                                 System.out.println("Next customer from Waiting List added to Queue " + queueNumber + ".");
@@ -260,7 +247,7 @@ public class Main {
                     Set<Customer> uniqueCustomers = new TreeSet<>(Comparator.comparing(Customer::getFirstName, Comparator.nullsFirst(String::compareTo)));
 
                     // Add non-null elements to the TreeSet
-                    for (Customer customer : waitingListQueue) {
+                    for (Customer customer : Customer.waitingListQueue) {
                         if (customer != null) {
                             uniqueCustomers.add(customer);
                         }
@@ -278,23 +265,23 @@ public class Main {
                 case "106", "SPD" -> {
                     customerNameList.sort(Comparator.comparing(Customer::getFirstName));
                     try (BufferedWriter writer = new BufferedWriter(new FileWriter("programData.txt"))) {
-                            ArrayList<String> uniqueFirstNames = new ArrayList<>();
+                        ArrayList<String> uniqueFirstNames = new ArrayList<>();
 
-                            for (Customer customer : customerNameList) {
-                                String firstName = customer.getFirstName();
+                        for (Customer customer : customerNameList) {
+                            String firstName = customer.getFirstName();
 
-                                // Check if the first name is already present in the list
+                            // Check if the first name is already present in the list
 
-                                if (!uniqueFirstNames.contains(firstName)) {
-                                    uniqueFirstNames.add(firstName);
-                                    writer.write(firstName);
-                                    writer.newLine();
-                                }
+                            if (!uniqueFirstNames.contains(firstName)) {
+                                uniqueFirstNames.add(firstName);
+                                writer.write(firstName);
+                                writer.newLine();
                             }
+                        }
 
-                            System.out.println("Customer names saved to file successfully.");
-                        } catch (IOException e) {
-                            System.out.println("Error occurred while saving customer names: " + e.getMessage());
+                        System.out.println("Customer names saved to file successfully.");
+                    } catch (IOException e) {
+                        System.out.println("Error occurred while saving customer names: " + e.getMessage());
                     }
                 }
                 case "107", "LPD" -> {
@@ -326,15 +313,15 @@ public class Main {
                     System.out.println("Remaining burgers in stock: " + BurgerStock);
                 }
                 case "109", "AFS" -> {
-                    System.out.print("Enter number of burgers to add to stock: ");
-                    int additional_burgers = Input.nextInt();
-                    BurgerStock += additional_burgers;
-                    System.out.println(additional_burgers + " burgers added to stock. Current stock: " + BurgerStock);
+                    while (BurgerStock < 50) {
+                        BurgerStock++;
+                    }
+                    System.out.println("Burgers added to stock - Updated stock : " + BurgerStock);
                 }
                 case "110", "IFQ" -> {
-                    int income1 = calculateIncome(FoodQueue1);
-                    int income2 = calculateIncome(FoodQueue2);
-                    int income3 = calculateIncome(FoodQueue3);
+                    int income1 = FoodQueue.calculateIncome(FoodQueue1);
+                    int income2 = FoodQueue.calculateIncome(FoodQueue2);
+                    int income3 = FoodQueue.calculateIncome(FoodQueue3);
 
                     int totalIncome = income1 + income2 + income3;
 
@@ -353,38 +340,8 @@ public class Main {
             }
         }
     }
-    private static List<Customer> getQueue(int queueNumber) {
-        switch (queueNumber) {
-            case 1-> {
-                return FoodQueue1;
-            }
-            case 2 -> {
-                return FoodQueue2;
-            }
-            case 3 -> {
-                return FoodQueue3;
-            }
-            default -> {
-                return null;
-            }
-        }
+}
 
-    }
-    private static void removeCustomerFromLine(Customer customer) {
-        line_1.remove(customer);
-        line_2.remove(customer);
-        line_3.remove(customer);
-    }
-    private static int calculateIncome(List<Customer> queue) {
-        int income = 0;
-        for (Customer customer : queue) {
-            if (customer != null) {
-                income += customer.getBurgersCount() * burgerPrice;
-            }
-        }
-        return income;
-    }
- }
 
 
 

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="658.0" prefWidth="896.0" style="-fx-background-color: #d3deed;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainWindow">
+   <children>
+      <Text fill="#281f1f" layoutX="561.0" layoutY="442.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Customer Details in Waiting Queue" wrappingWidth="280.59635162353516">
+         <font>
+            <Font name="Calibri Bold" size="18.0" />
+         </font>
+      </Text>
+      <Text fill="#362424" layoutX="134.0" layoutY="441.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search Customer Details in Food Queue" wrappingWidth="308.3740234375">
+         <font>
+            <Font name="Calibri Bold" size="18.0" />
+         </font>
+      </Text>
+      <Button layoutX="209.0" layoutY="464.0" mnemonicParsing="false" text="Press to continue">
+         <font>
+            <Font name="Calibri" size="13.0" />
+         </font>
+      </Button>
+      <Button layoutX="610.0" layoutY="465.0" mnemonicParsing="false" text="Press to Continue" textFill="#1b1818" />
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="368.0" layoutY="204.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../Downloads/pngwing.com.png" />
+         </image>
+      </ImageView>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="71.0" layoutX="264.0" layoutY="47.0" stroke="BLACK" strokeType="INSIDE" width="381.0" />
+      <Text layoutX="341.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Foodies Fave Food Center" wrappingWidth="249.44659423828125">
+         <font>
+            <Font name="Segoe UI Bold" size="18.0" />
+         </font>
+      </Text>
+   </children>
+</AnchorPane>
